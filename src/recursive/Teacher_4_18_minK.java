@@ -1,5 +1,7 @@
 package recursive;
 
+import java.util.HashSet;
+
 /*
 利用快排找第k小的值
 也可以建立一个小根堆，输出第几次，就是第几小的（但如果数据多，又要找个第10000小的就很麻烦）
@@ -26,7 +28,11 @@ public class Teacher_4_18_minK {
         System.out.printf("max1 : %d max2 ： %d \n", max1, max2);
     }
 
-//  =============================  找第k小（对应数组下标是0.。。k-1）============================================
+//  =============================  找第k小（若排好序，对应数组下标是k-1）============================================
+  /*
+     因为执行完Parition后，基准值到达了最终位置，且左侧的值都不比他大。所以可不停递归划分，且只用处理一边,直到基准值序号等于k。
+  * */
+
     public static int Parition(int[] br, int left, int right) {
         int i = left, j = right;
         int tmp = br[i];
@@ -45,14 +51,14 @@ public class Teacher_4_18_minK {
         return i;
     }
 
-    //即在下标为[left,right]中找第K小
+    //即在下标为[left,right]中找第K小（没有办法解决数据重复问题！！！）
     public static int Print_K(int[] br, int left, int right, int k) {
-        //特殊情况（仅有一个元素，且要找第一小    或者  层层调用Print_K,直到区间长为1，且基准值为要找元素）
+        //特殊情况（仅有一个元素，且要找第一小    或者  层层调用Print_K,直到区间长为1，则基准值为要找的元素）
         if (left == right && k == 1)
             return br[left];
 
         //index即基准值的位置，左边的都比他小
-        int index = Parition(br, left, right);//递归划分，只处理一边(分治)就行！！！不用排序再找，所以比线性时间还小
+        int index = Parition(br, left, right);//递归划分，只处理一边(分治)就行！！！不用排好序再找，所以比线性时间（即 Ο（n））还小（例如将一列数字加总的所需时间，正比于串行的长度）
         int pos = index - left + 1;//即看基准值是第几小。比如0  1  2  3  4（基准值所在下标）   5   6    7    ，可发现4是第5小
 
         if(k==pos)
@@ -70,9 +76,75 @@ public class Teacher_4_18_minK {
 
     public static void main(String[] args) {
         int[] ar = {56, 78, 12, 34, 90, 67, 100, 45, 23, 89};
-        //第k小
-        for (int k = 1; k <= ar.length; ++k) {
-            System.out.printf("%d => %d \n", k, Print_K_Min(ar, k));
+
+//        56, 78, 12, 34, 90, 67, 100, 45, 23, 89，89  //可以先用堆排序判断有无重复值
+//        System.out.println(cheakRepeat(ar));
+//        //第k小
+//        for (int k = 1; k <= ar.length; ++k) {
+//            System.out.printf("%d => %d \n", k, Print_K_Min(ar, k));
+//        }
+
+
+//        int mindist=Cpair(ar,0,ar.length-1);//传入下标范围
+//        System.out.println("mindist = [" + mindist + "]");
+
+    }
+
+
+
+//由于hashset实现了set接口，所以它不允许集合中有重复的值，
+// 在调用add方法时，如果插入了重复值，不会插入，并且会返回false。
+    public static boolean cheakRepeat(int[] array){
+        HashSet<Integer> hashSet = new HashSet<Integer>();
+        boolean flag=true;
+        for (int i = 0; i < array.length; i++) {
+            if(hashSet.add(array[i])==false){
+                flag=false;
+                break;
+            }
+
         }
+        return flag;
+//        if (hashSet.size() == array.length){
+//            return true;
+//        }else {
+//            return false;
+//        }
+    }
+    public static int Min(int a,int b){
+        return a<b?a:b;
+    }
+    public static int Min3(int a,int b,int c){
+        return Min(a,Min(b,c));
+    }
+    //从左边S1区间(包含了基准值m)找最大值,所以在最右边
+    public  static int MaxS1(int[] ar,int left,int right){
+        return ar[right];
+    }
+    public  static int MinS2(int[] ar,int left,int right){
+        int minS2=ar[left];
+        //遍历
+        for(int i=left+1;i<=right;i++){
+            if(minS2>ar[i]){
+                minS2=ar[i];
+            }
+        }
+        return minS2;
+    }
+//  最接近点对
+    private static int Cpair(int[] ar, int left, int right) {
+        if(right-left<=0)//即区间里 <=1个值
+            return  Integer.MAX_VALUE;
+
+        int k=(right-left+1)/2;//不加1，第59行Parition会报错（因为right-left=1时，有俩值，但K为第0小）
+        Print_K(ar,left,right,k);//用第 k 小，将区间划分为S1  S2() （没有办法解决数据重复问题！！！）
+        int d1=Cpair(ar,left,left+k-1);//找S1区间的最近距离（传入物理位置下标）
+        int d2=Cpair(ar,left+k,right);//S2的最近距离
+
+        int maxS1=MaxS1(ar,left,left+k-1);
+        int minS2=MinS2(ar,left+k,right);
+
+        return Min3(d1,d2,minS2-maxS1);//找到3个值里面的最小值
+
     }
 }
