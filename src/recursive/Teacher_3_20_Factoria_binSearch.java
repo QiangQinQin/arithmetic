@@ -275,9 +275,9 @@ public class Teacher_3_20_Factoria_binSearch {
    全排列   算法书13页图！！！
    排列树可以用来解决旅行售货问题(算法书P122)   n后问题(书P135)
    */
+   //k m是要排序字母的起点和终点
     private static void Perm(int[] arr, int k, int m) {
-        //k m是要排序字母的起点和终点   位置重合，即只剩一个元素
-        if (k == m) {
+        if (k == m) {//  位置重合，即前面的都固定了，只剩一个元素
             for (int i = 0; i <= m; i++) {
                 System.out.print(arr[i] + " ");
             }
@@ -285,9 +285,9 @@ public class Teacher_3_20_Factoria_binSearch {
             //执行到此，此层perm已结束，回退
         } else {
             for (int j = k; j <= m; j++) {
-                Swap_Arr(arr, j, k);//固定一个
-                Perm(arr, k + 1, m);//规模减小
-                Swap_Arr(arr, j, k);//处理完一个首字母的全排列后，回退，保证原数组仍为1 2 3  不然输出结果发现 1 2 3重复
+                Swap_Arr(arr, j, k);//固定一个(把j处字母换到k位置:1,2,3 ==>1,{2,3}  2,{1,3}  3,{2,1})
+                Perm(arr, k + 1, m);//递归时起点后移，规模减小，全排列后面的字母
+                Swap_Arr(arr, j, k);//处理完后，恢复，保证原数组仍为1 2 3  不然输出结果发现 1 2 3重复
             }
         }
     }
@@ -358,7 +358,7 @@ public class Teacher_3_20_Factoria_binSearch {
 //       System.out.println(optimize_Fib(6));
 
 //       int[] arr={1,2,3};
-//       Perm(arr,0,arr.length-1);
+//       Perm(arr,0,arr.length-1);//全排列
 
         //子集
         int[] arr = {1, 2, 3};//数组
