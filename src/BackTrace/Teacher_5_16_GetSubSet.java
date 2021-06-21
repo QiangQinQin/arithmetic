@@ -50,7 +50,7 @@ public class Teacher_5_16_GetSubSet {
         直到br为1 1 1，不断的加1越界回退，最后数组下标变为-1，br此时为2 2 2
 
 
-         因为列出了 每一位是0或1的全部组合，所以可以用来解决每个物品装还是不装的  01背包问题
+         因为NiceGet_Subset使br列出了 每一位是0或1的全部组合，所以可以用来解决每个物品装还是不装的  01背包问题
          （即把每种排列对应的背包重量算一下，符合条件再算其价值是不是最大）
          这种方法算穷举，回溯会要求一个减枝函数或限定函数（即到某个节点发现不满足条件，就不再往下搜索其子树了）
     * */
@@ -119,10 +119,10 @@ public class Teacher_5_16_GetSubSet {
 
     public static void main(String[] args) {
 //        //子集
-//        int[] arr = {1, 2, 3};//数组
-//        int[] brr = {0, 0, 0};//打印标识
-////        get_Subset(arr, brr, 0, arr.length);//输出标识 对应 length层的树的叶节点的路径，注意wps图
-//        NiceGet_Subset(arr,brr);
+        int[] arr = {1, 2, 3};//数组
+        int[] brr = {0, 0, 0};//打印标识
+//        get_Subset(arr, brr, 0, arr.length);//输出标识 对应 length层的树的叶节点的路径，注意wps图
+        NiceGet_Subset(arr,brr);
 
 //        01背包（用上面的算法进行穷举）
         int n = 5;//物品数量
