@@ -5,7 +5,7 @@ package recursive;
  * * @date 2021/5/18
  */
 
-public class Teacher_3_20_Factoria_binSearch {
+public class Teacher_3_20_Factoria_binSearch_SubSet_Perm {
 
     /*
           阶乘结果 超出int范围(4字节)怎么办？
@@ -338,7 +338,7 @@ public class Teacher_3_20_Factoria_binSearch {
 
     private static void NiceGet_Subset(int[] ar, int[] br) {
         int i = 0;
-        br[i] = -1;
+        br[i] = -1;//br标记了各位的所有的01组合方式
         //下标回退到-1时，说明处理完了
         while (i >= 0) {
             br[i] += 1;//统一完成加一
